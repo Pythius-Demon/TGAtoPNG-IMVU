@@ -1,0 +1,11 @@
+{
+  "name": "imvu-tga-converter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "canvas": "^2.12.0",
+    "tga.js": "^1.0.0",
+    "node-fetch": "^3.3.1"
+  }
+}
