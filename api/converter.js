@@ -1,22 +1,19 @@
-import { readFile } from 'fs/promises';
-import path from 'path';
-import { TGA } from 'tga2png'; // or your chosen library
+import fetch from 'node-fetch';
+import { TGA } from 'tga2png';
 
 export default async function handler(req, res) {
   try {
-    const url = req.query.url;
-    if (!url) throw new Error("No URL provided");
+    const tgaUrl = req.query.url;
+    if (!tgaUrl) throw new Error('No URL provided');
 
-    // Fetch the TGA file from IMVU
-    const tgaRes = await fetch(url);
-    const tgaBuffer = Buffer.from(await tgaRes.arrayBuffer());
+    const tgaResponse = await fetch(tgaUrl);
+    const tgaBuffer = Buffer.from(await tgaResponse.arrayBuffer());
 
-    // Convert TGA to PNG
-    const pngBuffer = TGA.toPNG(tgaBuffer); // make sure this returns a full PNG buffer
+    const pngBuffer = TGA.toPNG(tgaBuffer); // returns full PNG buffer
 
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Content-Length', pngBuffer.length);
-    res.end(pngBuffer); // send full buffer, not streaming
+    res.end(pngBuffer); // send entire PNG at once
   } catch (err) {
     res.status(500).send(`Error converting TGA: ${err.message}`);
   }
